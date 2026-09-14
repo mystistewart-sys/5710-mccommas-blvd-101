@@ -1,0 +1,357 @@
+{
+  "_meta": {
+    "purpose": "Single source of truth for 5710 McCommas Blvd #101. Used by the public page and the AI concierge.",
+    "sources": [
+      "NTREIS MLS Agent Full report, MLS# 21312626, prepared 09/14/2026",
+      "Dallas Central Appraisal District (DCAD) Residential Account Detail #00C27110000300101, retrieved 04/28/2026"
+    ],
+    "confidentialExcluded": [
+      "Owner name and owner mailing address (DCAD)",
+      "Keybox number and keybox type (MLS)",
+      "Private agent remarks (MLS)",
+      "Agent-only showing service phone number (MLS)"
+    ],
+    "lastReviewed": "2026-09-14"
+  },
+  "identity": {
+    "streetAddress": "5710 McCommas Blvd, Unit 101",
+    "city": "Dallas",
+    "state": "TX",
+    "stateName": "Texas",
+    "postalCode": "75206",
+    "county": "Dallas",
+    "shortName": "5710 McCommas #101",
+    "displayName": "5710 McCommas Blvd, Unit 101",
+    "community": "Greenwood Flats Condominiums",
+    "neighborhood": "Lower Greenville / M Streets, East Dallas",
+    "buildingLabel": "Building 3, Unit 101",
+    "mapQuery": "5710 McCommas Blvd Unit 101, Dallas, TX 75206",
+    "_geoNote": "[VERIFY] No verified latitude/longitude was supplied. The map and structured data use the postal address rather than coordinates so nothing is published that has not been verified."
+  },
+  "listing": {
+    "status": "Active",
+    "mlsNumber": "21312626",
+    "mlsSource": "NTREIS",
+    "listPrice": 450000,
+    "originalListPrice": 450000,
+    "pricePerSqFt": 277.09,
+    "listDate": "2026-06-26",
+    "expirationDate": "2026-12-31",
+    "daysOnMarket": 59,
+    "cumulativeDaysOnMarket": 109,
+    "recentActivity": "Back on market 09/04/2026",
+    "listingTerms": "Cash",
+    "possession": "Closing/Funding",
+    "listType": "Exclusive Right To Sell",
+    "alsoForLease": false
+  },
+  "structure": {
+    "propertyType": "Residential",
+    "propertySubType": "Condominium",
+    "housingType": "Condo/Townhome",
+    "styleOfHouse": "Contemporary/Modern",
+    "bedrooms": 2,
+    "bathroomsFull": 2,
+    "bathroomsHalf": 1,
+    "bathroomsTotal": 3,
+    "squareFeet": 1624,
+    "squareFeetSource": "Assessor",
+    "yearBuilt": 2016,
+    "yearBuiltSource": "Assessor",
+    "effectiveYearBuilt": 2016,
+    "storiesInUnit": 1,
+    "buildingStories": 3,
+    "floorLocation": 1,
+    "propertyAttached": true,
+    "fireplaces": 0,
+    "pool": false,
+    "foundation": "Slab",
+    "construction": "Stucco, Wood",
+    "exteriorWallMaterial": "Stucco",
+    "roof": "Composition",
+    "roofNoteDcad": "DCAD records roof type as FLAT with COMP ROLL material",
+    "flooring": "Concrete",
+    "heating": "Central, Electric",
+    "cooling": "Central Air, Electric",
+    "constructionTypeDcad": "Frame",
+    "buildingClassDcad": "Condominium",
+    "desirabilityDcad": "Very Good",
+    "depreciationDcad": "3%",
+    "percentCompleteDcad": "100%"
+  },
+  "rooms": [
+    {
+      "name": "Primary Bedroom",
+      "dimensions": "13 x 16",
+      "level": 1
+    },
+    {
+      "name": "Second Bedroom",
+      "dimensions": "13 x 15",
+      "level": 1
+    },
+    {
+      "name": "Living Room",
+      "dimensions": "28 x 13",
+      "level": 1
+    },
+    {
+      "name": "Kitchen",
+      "dimensions": "9 x 13",
+      "level": 1
+    },
+    {
+      "name": "Den / Flex Room",
+      "dimensions": "9 x 10",
+      "level": 1
+    }
+  ],
+  "features": {
+    "appliances": [
+      "Dishwasher",
+      "Disposal",
+      "Electric Oven",
+      "Electric Water Heater",
+      "Gas Cooktop",
+      "Refrigerator",
+      "Vented Exhaust Fan"
+    ],
+    "interior": [
+      "Cable TV Available",
+      "Decorative Lighting",
+      "Flat Screen Wiring",
+      "High Speed Internet Available"
+    ],
+    "exterior": [
+      "Balcony",
+      "Rain Gutters"
+    ],
+    "security": [
+      "Fire Sprinkler System",
+      "Firewall(s)",
+      "Smoke Detector(s)",
+      "Wireless"
+    ],
+    "lotDescription": [
+      "Few Trees",
+      "Landscaped",
+      "Sprinkler System"
+    ],
+    "fence": "Wood, Wrought Iron",
+    "utilities": "City Sewer, City Water",
+    "easements": "None",
+    "smartHomeAppPowered": false,
+    "handicapAmenities": false,
+    "adultCommunity": false
+  },
+  "parking": {
+    "garageSpaces": 2,
+    "coveredSpaces": 2,
+    "carportSpaces": 0,
+    "attachedGarage": false,
+    "description": [
+      "Assigned",
+      "Common",
+      "Covered",
+      "Garage Door Opener",
+      "Underground"
+    ],
+    "summary": "Two assigned, covered parking spaces in the building's underground garage."
+  },
+  "land": {
+    "acresOfRegime": 0.957,
+    "squareFeetOfRegime": 41686,
+    "lotSizeRange": ".5 to < 1 Acre",
+    "commonElementInterestPct": 2.72,
+    "subdividable": false,
+    "note": "The 0.957-acre / 41,686 sq ft figure is the land of the entire Greenwood Flats condominium regime, held in common \u2014 it is not a private lot conveyed with Unit 101. Unit 101 carries a 2.72% undivided common-element interest."
+  },
+  "hoa": {
+    "required": "Mandatory",
+    "managementCompany": "Guardian Association Management",
+    "managementPhone": "972-458-2200",
+    "duesAmount": 457,
+    "duesFrequency": "Monthly",
+    "includes": [
+      "Full Use of Facilities",
+      "Insurance",
+      "Maintenance Structure",
+      "Management Fees"
+    ],
+    "amenities": "[VERIFY] The MLS lists 'Full Use of Facilities' but does not enumerate specific community amenities. No pool, fitness center, or other amenity should be advertised until confirmed against the HOA documents.",
+    "documentsReviewed": false,
+    "rulesNote": "[VERIFY] HOA governing documents, budget, reserves, rental restrictions, pet rules and architectural restrictions were not provided and have not been reviewed."
+  },
+  "taxes": {
+    "parcelId": "00C27110000300101",
+    "legalDescription": "GREENWOOD FLATS CONDOMINIUMS, BLK A/2896, LT 1, ACS 0.957, BLDG 3, UNIT 101, CE 2.72%",
+    "appraisalDistrict": "Dallas Central Appraisal District",
+    "taxYear": 2026,
+    "valuesStatus": "2026 Proposed Values",
+    "improvementValue": 427640,
+    "landValue": 62360,
+    "marketValue": 490000,
+    "exemptions": "None currently on record",
+    "currentAnnualTax": 10910.88,
+    "currentAnnualTaxRounded": 10911,
+    "combinedRatePer100": 2.22671,
+    "combinedRatePct": 2.22671,
+    "jurisdictions": [
+      {
+        "name": "City of Dallas",
+        "ratePer100": 0.6988,
+        "amount": 3424.12
+      },
+      {
+        "name": "Dallas ISD",
+        "ratePer100": 0.993835,
+        "amount": 4869.79
+      },
+      {
+        "name": "Dallas County",
+        "ratePer100": 0.2155,
+        "amount": 1055.95
+      },
+      {
+        "name": "Dallas College",
+        "ratePer100": 0.106575,
+        "amount": 522.22
+      },
+      {
+        "name": "Parkland Hospital",
+        "ratePer100": 0.212,
+        "amount": 1038.8
+      }
+    ],
+    "specialAssessments": "None disclosed. Public Improvement District (PID): No. Municipal Utility District (MUD): No.",
+    "melloRoos": "Not applicable \u2014 Mello-Roos is a California mechanism and does not exist in Texas.",
+    "notes": [
+      "The $10,910.88 figure is DCAD's 2026 estimate on a $490,000 taxable value with no exemptions applied. It reconciles exactly: $490,000 x 2.22671% = $10,910.88.",
+      "Texas has no California-style Proposition 13 assessment cap. Values are reappraised toward market, so a buyer's assessment may differ from the current figure.",
+      "2026 values are shown by DCAD as proposed and can change through the appraisal review process.",
+      "A buyer who occupies the home as a principal residence may be eligible to file a Texas homestead exemption, which would reduce the taxable value. Eligibility and amounts must be confirmed with DCAD."
+    ]
+  },
+  "specialItems": {
+    "solar": "None indicated in the MLS or DCAD records for this unit.",
+    "battery": "None indicated.",
+    "evCharger": "[VERIFY] Not listed in the MLS. Confirm whether any EV charging is available in the underground garage.",
+    "waterFiltration": "Not listed.",
+    "smartHome": "The MLS records Smart Home App/Powered as No. The unit is listed with Flat Screen Wiring, Decorative Lighting, Cable TV Available and High Speed Internet Available.",
+    "includedAppliances": "The MLS appliance list includes a refrigerator. [VERIFY] Confirm in the contract which appliances convey.",
+    "leasedEquipment": "None disclosed.",
+    "exclusions": "[VERIFY] No furniture or fixture exclusions were provided.",
+    "basement": "[VERIFY] The MLS marks Basement as Yes while DCAD records Basement as NONE. This most likely refers to the building's below-grade parking level rather than unit basement space."
+  },
+  "schools": {
+    "district": "Dallas ISD",
+    "elementary": "Mockingbird Elementary School",
+    "middle": "Long Middle School",
+    "high": "Woodrow Wilson High School",
+    "ratings": "Not provided \u2014 no ratings are published on this site.",
+    "disclaimer": "School assignments, boundaries, ratings, enrollment eligibility, and transfer policies may change. Buyers should independently verify school information directly with Dallas ISD."
+  },
+  "neighborhood": {
+    "summary": "Greenwood Flats sits on McCommas Blvd in East Dallas, between Lower Greenville and the M Streets, close to Mockingbird Station and Greenville Avenue.",
+    "drivingDirections": "East on Mockingbird from US-75. Right on Greenville Ave. Left on McCommas Blvd.",
+    "destinations": [
+      {
+        "name": "Greenville Avenue",
+        "note": "The Lower Greenville restaurant, patio and nightlife corridor."
+      },
+      {
+        "name": "Mockingbird Station",
+        "note": "Mixed-use center with shops, dining, a cinema, and a DART light rail station."
+      },
+      {
+        "name": "Granada Theater",
+        "note": "Historic live music venue on Greenville Avenue."
+      },
+      {
+        "name": "Southern Methodist University (SMU)",
+        "note": "University campus just north in University Park."
+      },
+      {
+        "name": "White Rock Lake",
+        "note": "East Dallas lake with a loop trail and park land."
+      },
+      {
+        "name": "The M Streets",
+        "note": "Adjacent residential district known for its Tudor-style homes."
+      },
+      {
+        "name": "US-75 (Central Expressway)",
+        "note": "Primary north-south freeway access, reached via Mockingbird Lane."
+      }
+    ],
+    "destinationsNote": "Destinations are drawn from the listing's public remarks and driving directions. Travel times vary with traffic and route and are not stated on this site.",
+    "developmentPlans": "[VERIFY] No known or pending development plans were provided.",
+    "distancesVerified": false
+  },
+  "highlights": [
+    {
+      "title": "Two bedrooms, two ensuite baths",
+      "body": "Each bedroom has its own full bath, so there is no shared-bath compromise between the primary and the second bedroom."
+    },
+    {
+      "title": "A separate den, not a converted bedroom",
+      "body": "A dedicated 9 x 10 den means a home office or studio without giving up the second bedroom."
+    },
+    {
+      "title": "Single-level, ground-floor living",
+      "body": "Unit 101 is on the first floor of a three-story building, laid out on one level with no interior stairs."
+    },
+    {
+      "title": "A 28-foot open living space",
+      "body": "Living, dining and kitchen run together across the main space, with windows on multiple sides."
+    },
+    {
+      "title": "Gas cooktop kitchen with a large island",
+      "body": "Gas cooktop under a vented stainless hood, full stainless appliance suite, tile backsplash, and an oversized island with seating."
+    },
+    {
+      "title": "Polished concrete floors throughout",
+      "body": "Durable, continuous concrete flooring runs through the living areas \u2014 no carpet seams, no refinishing."
+    },
+    {
+      "title": "Two covered underground parking spaces",
+      "body": "Two assigned, covered spaces in the building's secured underground garage, plus a private covered balcony above street level."
+    },
+    {
+      "title": "Lock-and-leave ownership",
+      "body": "The $457 monthly HOA covers building insurance, structural maintenance and management, so there is no roof, yard or exterior punch list."
+    }
+  ],
+  "marketing": {
+    "headline": "Live the Lower Greenville lifestyle \u2014 without the upkeep",
+    "pullQuote": "Lock it, leave it, and let the neighborhood do the rest.",
+    "mlsPublicRemarksSource": "NTREIS MLS# 21312626 public remarks, written by the listing agent."
+  },
+  "agent": {
+    "name": "Mysti Stewart",
+    "mlsName": "Mysti Newberry Stewart",
+    "team": "Mysti Stewart Group",
+    "license": "0525273",
+    "phone": "214-213-3537",
+    "phoneE164": "+12142133537",
+    "email": "mysti.stewart@compass.com",
+    "website": "https://www.mystistewartgroup.com",
+    "brokerage": "Compass RE Texas, LLC",
+    "brokerageLicense": "9006927",
+    "brokeragePhone": "214-814-8100",
+    "brokerageAddress": "6220 Gaston Avenue, Suite 200, Dallas, Texas 75214"
+  },
+  "notProvided": [
+    "Upgrade schedule / improvement cost documentation",
+    "HOA governing documents, budget, reserve study and resale certificate",
+    "Sale comparables",
+    "Lease comparables",
+    "Floor plan",
+    "Matterport or other virtual tour",
+    "Property video",
+    "Seller's disclosure notice",
+    "Survey",
+    "Analytics measurement IDs",
+    "Online scheduling / booking links"
+  ]
+}

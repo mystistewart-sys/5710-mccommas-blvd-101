@@ -1,0 +1,282 @@
+/* =========================================================================
+   Property Concierge — serverless endpoint
+   POST /.netlify/functions/concierge  { question, history[] }  ->  { answer }
+
+   The Anthropic API key is read from the ANTHROPIC_API_KEY environment
+   variable and never leaves the server. The knowledge base below is a
+   curated, organised extract of this property's verified documents —
+   confidential fields (owner identity, keybox, private agent remarks,
+   agent-only showing line) are deliberately excluded.
+   ========================================================================= */
+
+const MODEL = 'claude-sonnet-5';
+const MAX_QUESTION = 600;
+
+/* ---------------------------- KNOWLEDGE BASE ---------------------------- */
+/* Sources: NTREIS MLS #21312626 (Agent Full, 09/14/2026) and Dallas Central
+   Appraisal District account #00C27110000300101 (retrieved 04/28/2026).    */
+
+const KB = `
+## 1. IDENTITY
+Address: 5710 McCommas Blvd, Unit 101, Dallas, TX 75206 (Dallas County).
+Community: Greenwood Flats Condominiums — Building 3, Unit 101.
+Neighborhood: East Dallas, between Lower Greenville and the M Streets.
+MLS #21312626 (NTREIS). Status: Active. Back on market 09/04/2026.
+Listed 06/26/2026. Listing agent: Mysti Stewart, Compass RE Texas, LLC.
+
+## 2. PRICE AND SIZE
+List price: $450,000 (also the original list price).
+Price per square foot: $277.09.
+Interior: 1,624 sq ft, source Assessor. DCAD also records living area 1,624 sq ft.
+Bedrooms: 2. Bathrooms: 2 full + 1 half (3 total). Each bedroom has its own ensuite full bath.
+Year built: 2016 (Assessor; DCAD effective year built also 2016).
+Listing terms per MLS: Cash. Possession at closing and funding.
+
+## 3. LAYOUT AND ROOMS (approximate, per MLS)
+Living Room 28 x 13 · Primary Bedroom 13 x 16 · Second Bedroom 13 x 15 ·
+Kitchen 9 x 13 · Den / flex room 9 x 10.
+One level, no interior stairs. Unit is on floor 1 of a 3-story building.
+The listing describes the den as a dedicated office; it is a separate room
+in addition to the two bedrooms.
+Living, dining and kitchen are open to one another.
+
+## 4. CONSTRUCTION AND SYSTEMS
+Type: Condominium, attached. Style: Contemporary/Modern.
+Construction: Stucco and wood. Exterior wall material: stucco. Frame construction (DCAD).
+Foundation: Slab. Roof: Composition per MLS; DCAD records roof type FLAT, material COMP ROLL.
+Flooring: Concrete. Heating: Central, electric. Cooling: Central air, electric.
+Water heater: electric. Utilities: City water and city sewer.
+Safety: Fire sprinkler system, firewall(s), smoke detector(s), wireless.
+Fireplaces: 0. Pool: No. DCAD desirability rating: Very Good. Depreciation 3%. 100% complete.
+Appliances listed: dishwasher, disposal, electric oven, electric water heater,
+gas cooktop, refrigerator, vented exhaust fan.
+Interior features: cable TV available, decorative lighting, flat screen wiring,
+high speed internet available.
+Exterior features: balcony, rain gutters. Fence: wood and wrought iron.
+Lot description: few trees, landscaped, sprinkler system.
+Smart Home App/Powered: No, per MLS.
+
+## 5. PARKING
+2 garage spaces, 2 covered spaces, 0 carport.
+Described as: assigned, common, covered, garage door opener, underground.
+The garage is a shared underground garage; the unit's spaces are assigned.
+Attached garage: No (the garage serves the building).
+
+## 6. LAND AND LEGAL
+Parcel / account: 00C27110000300101.
+Legal: GREENWOOD FLATS CONDOMINIUMS, BLK A/2896, LT 1, ACS 0.957, BLDG 3, UNIT 101, CE 2.72%.
+The 0.957 acres / 41,686 sq ft is the land of the WHOLE condominium regime held in
+common — it is NOT a private lot conveyed with Unit 101. Unit 101 carries a 2.72%
+undivided common-element interest. Not subdividable.
+Easements: None per MLS. PID: No. MUD: No.
+Most recent deed transfer on record: 09/07/2023.
+
+## 7. HOA
+Mandatory. Managed by Guardian Association Management, 972-458-2200.
+Dues: $457 per month.
+Dues include, per MLS: Full Use of Facilities, Insurance, Maintenance Structure,
+Management Fees.
+IMPORTANT LIMIT: the MLS does not enumerate which specific facilities or amenities
+exist. Do NOT state or imply that there is a pool, gym, clubhouse, or any other
+specific amenity. The HOA governing documents, budget, reserve study and resale
+certificate were NOT provided and have NOT been reviewed — so rental restrictions,
+pet rules, architectural restrictions and the reserve position are UNKNOWN. Say so
+plainly and suggest requesting the HOA resale package during the option period.
+
+## 8. TAXES (Dallas Central Appraisal District, 2026 proposed values)
+Improvement $427,640 + Land $62,360 = Market/taxable value $490,000.
+Exemptions: none currently on record.
+Total 2026 estimated tax: $10,910.88 per year (about $909/month). MLS unexempt tax: $10,911.
+Combined rate 2.22671% per $100 of value, made up of:
+  City of Dallas 0.6988 -> $3,424.12
+  Dallas ISD 0.993835 -> $4,869.79
+  Dallas County 0.2155 -> $1,055.95
+  Dallas College 0.106575 -> $522.22
+  Parkland Hospital 0.2120 -> $1,038.80
+At the $450,000 list price the same rate produces roughly $10,020/year — an ESTIMATE only.
+No special assessments disclosed. Mello-Roos does not exist in Texas (it is a California
+mechanism), and this property has no PID or MUD.
+Texas has NO California-style Proposition 13 assessment cap; values are reappraised
+toward market, so a buyer's assessment may differ. 2026 values are shown by DCAD as
+proposed and can change. A buyer occupying the home as a principal residence may be
+eligible for a Texas homestead exemption, which would lower taxable value — eligibility
+and amounts must be confirmed with DCAD. Never present any tax figure as guaranteed.
+
+## 9. SCHOOLS (as reported in the MLS)
+District: Dallas ISD. Elementary: Mockingbird. Middle: Long. High: Woodrow Wilson.
+No ratings are available and none should be stated.
+Always add that assignments, boundaries and eligibility can change and must be verified
+directly with Dallas ISD. Never guarantee attendance at any school.
+
+## 10. NEIGHBORHOOD
+From the listing's public remarks and driving directions only:
+Greenville Avenue (Lower Greenville restaurants and patios), Mockingbird Station
+(shops, dining, cinema, DART light rail), Granada Theater, the M Streets, SMU,
+White Rock Lake, and US-75 access by way of Mockingbird Lane.
+Directions: east on Mockingbird from US-75, right on Greenville Ave, left on McCommas Blvd.
+Do NOT state drive times, distances in miles, walk scores or ratings — none were verified.
+
+## 11. SPECIAL ITEMS
+Solar: none indicated in the MLS or DCAD records. No battery system indicated.
+EV charging: not listed in the MLS — unknown, must be confirmed.
+Water filtration: not listed. Leased equipment: none disclosed.
+A refrigerator appears on the MLS appliance list; confirm in the contract which
+appliances actually convey. No furniture or fixture exclusions were provided.
+BASEMENT CONFLICT: the MLS marks Basement as "Yes" while DCAD records Basement as
+"NONE". This most likely refers to the building's below-grade parking level rather
+than basement space in the unit. Flag it as needing verification if asked.
+
+## 12. NOT AVAILABLE — say so if asked
+Upgrade or renovation cost schedule; HOA documents, budget and reserve study;
+sale comparables; lease comparables; floor plan; Matterport or virtual tour; video;
+seller's disclosure notice; survey; rental history; and any online booking link.
+
+## 13. CONTACT AND NEXT STEPS
+Mysti Stewart, Mysti Stewart Group, Compass RE Texas, LLC. Texas license #0525273.
+Phone and text: 214-213-3537. Email: mysti.stewart@compass.com.
+Showings are by appointment. To schedule, point people to the contact form in the
+Contact section of this page, or to calling/texting 214-213-3537.
+If asked about financing or listing terms: the MLS lists the terms as Cash, and the
+buyer or their agent should contact Mysti directly to discuss options for this unit.
+`;
+
+const SYSTEM = `You are the property concierge for the single-property website for
+5710 McCommas Blvd, Unit 101, Dallas, TX 75206, listed by Mysti Stewart of the
+Mysti Stewart Group at Compass RE Texas, LLC.
+
+SOURCE OF TRUTH
+Answer ONLY from the PROPERTY RECORD below. It is drawn from the NTREIS MLS listing
+and the Dallas Central Appraisal District record for this unit. If the answer is not
+in the record, say plainly that you do not have it and direct the person to Mysti
+Stewart at 214-213-3537. Never guess, never estimate a number that is not in the
+record, and never fill a gap with general knowledge about Dallas, condos or the
+market. Do not answer questions unrelated to this property — redirect politely.
+
+SHAPE OF AN ANSWER
+Aim for 40-100 words. Three beats, in prose, no headings and no bullet lists:
+1. Answer the question directly.
+2. Say briefly why it matters to a buyer.
+3. Offer one logical next step or follow-up question.
+
+HONESTY RULES — these override everything else
+- For material facts (HOA dues and what they cover, taxes, special assessments,
+  square footage, lot and common-area size, schools, permits, boundaries, amenities,
+  appliances, parking, solar), open with a qualifier such as
+  "Based on the available property information, ..."
+  and add a short note that the figure should be verified during due diligence.
+- Never guarantee: future appreciation, rental income or rentability, school
+  attendance, tax amounts, or that any amenity exists or is privately owned.
+- Never claim an amenity the record does not name. "Full Use of Facilities" in the
+  HOA line does NOT tell you which facilities exist — say the specific amenities are
+  not documented and should be confirmed with the association.
+- If the MLS and the appraisal district disagree, say both and flag the conflict.
+- Present estimates as estimates and show the assumption behind them.
+
+FAIR HOUSING
+Never describe or characterise the people, demographics, religion, national origin,
+family makeup, or "type of buyer" of the neighborhood or building, and never steer
+anyone toward or away from an area on those grounds. Describe the property and
+verifiable locations only. Describe the den as a flexible room — office, studio or
+guest space — and do not assign rooms to particular kinds of occupants.
+
+PRIVACY
+Never reveal or speculate about the owner or occupant, showing instructions, lockbox
+or access details, the seller's motivation, or any negotiation position. You do not
+have this information and must not invent it.
+
+TONE
+Warm, precise, unhurried. Plain sentences. You are a knowledgeable assistant to a
+serious buyer, not a hype machine. No exclamation marks, no "stunning" or "must see".
+
+PROPERTY RECORD
+${KB}`;
+
+/* ------------------------------- handler -------------------------------- */
+const JSON_HEADERS = {
+  'Content-Type': 'application/json',
+  'Cache-Control': 'no-store',
+  'X-Content-Type-Options': 'nosniff'
+};
+
+const json = (body, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
+
+/* Best-effort throttle, per warm instance. */
+const hits = new Map();
+function throttled(ip) {
+  const now = Date.now();
+  const win = 60000, cap = 12;
+  const list = (hits.get(ip) || []).filter((t) => now - t < win);
+  list.push(now);
+  hits.set(ip, list);
+  if (hits.size > 500) hits.clear();
+  return list.length > cap;
+}
+
+export default async (req) => {
+  if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
+
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) {
+    console.error('ANTHROPIC_API_KEY is not set on this deploy.');
+    return json({ error: 'Concierge is not configured' }, 503);
+  }
+
+  const ip = req.headers.get('x-nf-client-connection-ip') || 'unknown';
+  if (throttled(ip)) return json({ error: 'Too many questions, please slow down' }, 429);
+
+  let payload;
+  try { payload = await req.json(); }
+  catch { return json({ error: 'Invalid request' }, 400); }
+
+  const question = String(payload?.question ?? '').trim().slice(0, MAX_QUESTION);
+  if (!question) return json({ error: 'Ask a question' }, 400);
+
+  const history = Array.isArray(payload?.history)
+    ? payload.history
+        .filter((m) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+        .slice(-8)
+        .map((m) => ({ role: m.role, content: String(m.content).slice(0, 2000) }))
+    : [];
+
+  /* A trailing assistant turn is invalid as the last message; history is
+     always followed by the new user turn, so just append. */
+  const messages = [...history, { role: 'user', content: question }];
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        max_tokens: 700,
+        temperature: 0.2,
+        system: SYSTEM,
+        messages
+      })
+    });
+
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '');
+      console.error('Anthropic API error', res.status, detail.slice(0, 500));
+      return json({ error: 'Upstream error' }, 502);
+    }
+
+    const data = await res.json();
+    const answer = (data?.content ?? [])
+      .filter((b) => b.type === 'text')
+      .map((b) => b.text)
+      .join('\n')
+      .trim();
+
+    if (!answer) return json({ error: 'Empty response' }, 502);
+    return json({ answer });
+  } catch (err) {
+    console.error('Concierge failure', err);
+    return json({ error: 'Concierge unavailable' }, 502);
+  }
+};
