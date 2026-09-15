@@ -105,13 +105,16 @@ health check tells you the state of the deploy without exposing the key:
 |---|---|---|
 | `{"ok":true,...}` | Function deployed, key set | Ask a question and read the `code` in the console |
 | `{"ok":false,"apiKeyConfigured":false}` | Function deployed, **no key** | Set `ANTHROPIC_API_KEY` in Netlify → Site configuration → Environment variables, then **redeploy** |
+| `{"ok":false,"apiKeyLooksValid":false}` | A value is set but it isn't an Anthropic key | Create one at console.anthropic.com → Settings → API keys. A Claude Pro/Max subscription does **not** include API access |
+| `"apiKeyHadQuotesOrWhitespace":true` | Key works but was pasted with quotes/newline | Stripped automatically; tidy the stored value anyway |
 | A 404 HTML page | Functions were not deployed | Check `netlify.toml` is at the repo root and the deploy log shows the function bundling |
 
 Ask a question with the browser console open (F12). Every failure logs
 `[concierge] request failed — <code>: <detail>`, and setup problems also print
 on the page itself. Codes: `not_configured`, `bad_api_key`, `model_unavailable`,
-`not_deployed`, `bad_request_upstream`, `upstream_rate_limited`, `refusal`,
-`empty_response`, `network_error`, `timeout`.
+`malformed_key`, `key_forbidden`, `no_credit`, `not_deployed`,
+`bad_request_upstream`, `upstream_rate_limited`, `refusal`, `empty_response`,
+`network_error`, `timeout`.
 
 Setting an env var in Netlify does **not** apply to the running site until you
 redeploy (Deploys → Trigger deploy → Clear cache and deploy site).

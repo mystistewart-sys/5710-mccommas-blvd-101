@@ -218,30 +218,81 @@ function throttled(ip) {
   return list.length > cap;
 }
 
+/* The most common cause of a rejected key is a paste artefact, not a wrong key:
+   a trailing newline from a copy, or quotes typed around the value in the
+   Netlify UI. Both are safe to strip. Anything still malformed is reported
+   precisely rather than sent to the API to fail. */
+function readKey() {
+  const raw = process.env.ANTHROPIC_API_KEY;
+  if (!raw) return { present: false };
+
+  let key = String(raw).trim();
+  const hadWhitespace = key !== String(raw);
+  const hadQuotes = /^(['"]).*\1$/s.test(key);
+  if (hadQuotes) key = key.slice(1, -1).trim();
+
+  return {
+    present: true,
+    key,
+    hadWhitespace,
+    hadQuotes,
+    // Format check only — no part of the secret is ever returned or logged.
+    looksValid: /^sk-ant-/.test(key),
+    length: key.length
+  };
+}
+
 export default async (req) => {
-  const key = process.env.ANTHROPIC_API_KEY;
+  const k = readKey();
+  const key = k.key;
 
   /* GET is a health check: open /.netlify/functions/concierge in a browser to
      see whether the function deployed and whether the key is configured.
      It reports only configuration status and never the key itself. */
   if (req.method === 'GET') {
+    let hint;
+    if (!k.present) {
+      hint = 'Set ANTHROPIC_API_KEY in Netlify: Site configuration -> Environment variables, then redeploy.';
+    } else if (!k.looksValid) {
+      hint = 'The value does not start with "sk-ant-", so it is probably not an Anthropic API key. ' +
+             'Create one at console.anthropic.com -> Settings -> API keys. Note that a Claude Pro or Max ' +
+             'subscription does NOT include API access; the API is billed separately.';
+    } else if (k.hadQuotes || k.hadWhitespace) {
+      hint = 'The key had surrounding quotes or whitespace; they were stripped. ' +
+             'Remove them in Netlify so the stored value is the bare key.';
+    } else {
+      hint = 'Function is deployed and the key is well-formed. If chat still fails, ' +
+             'POST a question and read the returned code.';
+    }
     return json({
-      ok: Boolean(key),
+      ok: Boolean(k.present && k.looksValid),
       function: 'deployed',
       model: MODEL,
-      apiKeyConfigured: Boolean(key),
-      hint: key
-        ? 'Function is deployed and an API key is set. If chat still fails, POST a question and read the returned code.'
-        : 'Set ANTHROPIC_API_KEY in Netlify: Site configuration -> Environment variables, then redeploy.'
-    }, key ? 200 : 503);
+      apiKeyConfigured: Boolean(k.present),
+      apiKeyLooksValid: Boolean(k.present && k.looksValid),
+      apiKeyLength: k.present ? k.length : 0,
+      apiKeyHadQuotesOrWhitespace: Boolean(k.hadQuotes || k.hadWhitespace),
+      hint
+    }, k.present && k.looksValid ? 200 : 503);
   }
 
   if (req.method !== 'POST') return fail('method_not_allowed', 'Method not allowed', 405);
 
-  if (!key) {
+  if (!k.present) {
     console.error('ANTHROPIC_API_KEY is not set on this deploy.');
     return fail('not_configured',
       'The concierge is not configured on this deploy: ANTHROPIC_API_KEY is missing.', 503);
+  }
+
+  if (!k.looksValid) {
+    console.error('ANTHROPIC_API_KEY does not look like an Anthropic key (length %d).', k.length);
+    return fail('malformed_key',
+      'The configured ANTHROPIC_API_KEY does not start with "sk-ant-", so it is probably not an ' +
+      'Anthropic API key. A Claude Pro/Max subscription does not include API access.', 503);
+  }
+
+  if (k.hadQuotes || k.hadWhitespace) {
+    console.warn('ANTHROPIC_API_KEY had surrounding quotes or whitespace; stripped before use.');
   }
 
   const ip = req.headers.get('x-nf-client-connection-ip') || 'unknown';
@@ -303,9 +354,19 @@ export default async (req) => {
       let upstreamType = '';
       try { upstreamType = JSON.parse(detail)?.error?.type || ''; } catch { /* not JSON */ }
 
-      if (res.status === 401 || res.status === 403) {
+      if (res.status === 401) {
         return fail('bad_api_key',
-          'The Anthropic API key was rejected. Check ANTHROPIC_API_KEY in Netlify.', 502);
+          'Anthropic rejected the API key as invalid. Confirm the key is active at ' +
+          'console.anthropic.com and that it was pasted in full.', 502);
+      }
+      if (res.status === 403) {
+        return fail('key_forbidden',
+          'The key is recognised but not permitted to make this call — often no credit balance, ' +
+          `or the workspace has no access to "${MODEL}". Check Plans & Billing in the Anthropic Console.`, 502);
+      }
+      if (upstreamType === 'billing_error' || /credit balance/i.test(detail)) {
+        return fail('no_credit',
+          'The Anthropic account has no credit balance. Add credits under Plans & Billing.', 502);
       }
       if (res.status === 404 || upstreamType === 'not_found_error') {
         return fail('model_unavailable',
