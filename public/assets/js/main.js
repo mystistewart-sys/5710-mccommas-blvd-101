@@ -339,14 +339,19 @@
   }
 
   /* ------------------------------- Map -------------------------------- */
-  var mapLoad = $('#mapLoad'), mapBox = $('#mapBox');
-  if (mapLoad && mapBox) {
-    mapLoad.addEventListener('click', function () {
-      var q = encodeURIComponent('5710 McCommas Blvd Unit 101, Dallas, TX 75206');
-      mapBox.innerHTML = '<iframe title="Map showing 5710 McCommas Blvd, Dallas, Texas" loading="lazy" ' +
-        'referrerpolicy="no-referrer-when-downgrade" allowfullscreen ' +
-        'src="https://www.google.com/maps?q=' + q + '&z=15&output=embed"></iframe>';
-    });
+  /* The map is embedded directly and loads itself lazily as the reader nears
+     it. Record that it was actually seen, once, so the section still reports
+     engagement now that there is no button to click. */
+  var mapBox = $('#mapBox');
+  if (mapBox && 'IntersectionObserver' in window) {
+    var mapSeen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        track('map_viewed');
+        mapSeen.disconnect();
+      });
+    }, { threshold: 0.35 });
+    mapSeen.observe(mapBox);
   }
 
   /* ------------------------------ Form -------------------------------- */

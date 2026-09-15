@@ -87,7 +87,7 @@ var ANALYTICS = { ga4: '', googleAds: '', adsLabels: {}, metaPixel: '' };
 Never paste in another property's IDs. Events already instrumented:
 `cta_showing`, `cta_ask`, `cta_gallery`, `contact_call`, `contact_email`,
 `gallery_open`, `gallery_filter`,
-`tax_estimator_used`, `map_open`, `ai_open`, `ai_question`, `ai_answer`,
+`tax_estimator_used`, `map_viewed`, `map_open_external`, `ai_open`, `ai_question`, `ai_answer`,
 `ai_error`, `form_submit_attempt`, `form_submit_success`, `form_submit_error`.
 
 All fire on real visitor actions. Nothing fires on page load. Add Google Ads
@@ -145,6 +145,15 @@ conflicts, never guarantee taxes or school attendance, never claim an unlisted
 amenity, fair-housing and privacy rules.
 
 ---
+
+## Map
+
+The map is embedded directly and carries `loading="lazy"`, so it appears without a
+click but costs nothing until the reader nears the Location section. It uses Google's
+keyless `maps?q=...&output=embed` endpoint, which is unofficial — an "Open in Google
+Maps" link sits beneath it so the section still works if that endpoint ever changes.
+To move to the supported Maps Embed API, swap the iframe `src` for
+`https://www.google.com/maps/embed/v1/place?key=<KEY>&q=<address>`.
 
 ## Editing content
 
