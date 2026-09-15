@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Mysti Stewart Group">
-  <rect width="64" height="64" fill="#245d61"/>
-  <path d="M12 38 32 22l20 16v2H46v10H34V40h-4v10H18V40h-6v-2Z" fill="#a4b7a2"/>
+  <rect width="64" height="64" fill="#16191a"/>
+  <g transform="translate(25.6 7) scale(0.2451)">
+    <polygon points="52,0 52,179 0,204 0,25" fill="#a4b7a2"/>
+  </g>
 </svg>

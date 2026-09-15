@@ -185,6 +185,20 @@ fact change must be applied in the page and the function KB as well.
 
 ---
 
+## Brand mark
+
+The parallelogram from the Mysti Stewart Group logo is inlined as an SVG
+polygon (`.mark`) in the nav and the footer, and used alone in `favicon.svg`.
+It was traced from the supplied artwork and matches it to 0.24px mean edge
+error; `viewBox="0 0 52 204"`, points `52,0 52,179 0,204 0,25`. Because it is
+inline it costs no extra request and takes its colour from CSS, so it can be
+recoloured per surface. A standalone copy sits at
+`public/assets/img/logo/mark.svg`.
+
+The wordmark is set in the site's own label type rather than as an image, so
+it stays crisp and selectable. Original artwork and a transparent-background
+PNG of the full lockup are archived in `assets-source/`.
+
 ## Brand
 
 | Token | Value |
