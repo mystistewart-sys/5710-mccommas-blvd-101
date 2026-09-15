@@ -85,8 +85,8 @@ var ANALYTICS = { ga4: '', googleAds: '', adsLabels: {}, metaPixel: '' };
 ```
 
 Never paste in another property's IDs. Events already instrumented:
-`cta_showing`, `cta_ask`, `cta_gallery`, `contact_call`, `contact_text`,
-`contact_email`, `contact_website`, `gallery_open`, `gallery_filter`,
+`cta_showing`, `cta_ask`, `cta_gallery`, `contact_call`, `contact_email`,
+`gallery_open`, `gallery_filter`,
 `tax_estimator_used`, `map_open`, `ai_open`, `ai_question`, `ai_answer`,
 `ai_error`, `form_submit_attempt`, `form_submit_success`, `form_submit_error`.
 
@@ -155,6 +155,7 @@ amenity, fair-housing and privacy rules.
 | Gallery photos, order, captions, categories | `PHOTOS` and `CATS` in `public/assets/js/main.js` |
 | Neighborhood destinations | `PLACES` in `public/assets/js/main.js` |
 | Property detail tables, costs, schools, disclaimers | `public/index.html` |
+| Agent card (photo, name, licence, brokerage) | `.agent` block in `public/index.html` |
 | Concierge knowledge | `KB` in `netlify/functions/concierge.mjs` |
 
 `data/property.json` is the reference record. It is not read at runtime, so any
