@@ -9,7 +9,7 @@
    agent-only showing line) are deliberately excluded.
    ========================================================================= */
 
-const MODEL = 'claude-sonnet-5';
+const MODEL = process.env.CONCIERGE_MODEL || 'claude-opus-5';
 const MAX_QUESTION = 600;
 
 /* ---------------------------- KNOWLEDGE BASE ---------------------------- */
@@ -201,6 +201,11 @@ const JSON_HEADERS = {
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
 
+/* Every failure used to return the same opaque message, which made a missing
+   API key indistinguishable from an undeployed function. Each failure now
+   carries a `code` the widget can act on and a human can read directly. */
+const fail = (code, message, status) => json({ error: message, code }, status);
+
 /* Best-effort throttle, per warm instance. */
 const hits = new Map();
 function throttled(ip) {
@@ -214,23 +219,40 @@ function throttled(ip) {
 }
 
 export default async (req) => {
-  if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
-
   const key = process.env.ANTHROPIC_API_KEY;
+
+  /* GET is a health check: open /.netlify/functions/concierge in a browser to
+     see whether the function deployed and whether the key is configured.
+     It reports only configuration status and never the key itself. */
+  if (req.method === 'GET') {
+    return json({
+      ok: Boolean(key),
+      function: 'deployed',
+      model: MODEL,
+      apiKeyConfigured: Boolean(key),
+      hint: key
+        ? 'Function is deployed and an API key is set. If chat still fails, POST a question and read the returned code.'
+        : 'Set ANTHROPIC_API_KEY in Netlify: Site configuration -> Environment variables, then redeploy.'
+    }, key ? 200 : 503);
+  }
+
+  if (req.method !== 'POST') return fail('method_not_allowed', 'Method not allowed', 405);
+
   if (!key) {
     console.error('ANTHROPIC_API_KEY is not set on this deploy.');
-    return json({ error: 'Concierge is not configured' }, 503);
+    return fail('not_configured',
+      'The concierge is not configured on this deploy: ANTHROPIC_API_KEY is missing.', 503);
   }
 
   const ip = req.headers.get('x-nf-client-connection-ip') || 'unknown';
-  if (throttled(ip)) return json({ error: 'Too many questions, please slow down' }, 429);
+  if (throttled(ip)) return fail('rate_limited', 'Too many questions, please slow down', 429);
 
   let payload;
   try { payload = await req.json(); }
-  catch { return json({ error: 'Invalid request' }, 400); }
+  catch { return fail('bad_request', 'Invalid request', 400); }
 
   const question = String(payload?.question ?? '').trim().slice(0, MAX_QUESTION);
-  if (!question) return json({ error: 'Ask a question' }, 400);
+  if (!question) return fail('bad_request', 'Ask a question', 400);
 
   const history = Array.isArray(payload?.history)
     ? payload.history
@@ -263,7 +285,22 @@ export default async (req) => {
     if (!res.ok) {
       const detail = await res.text().catch(() => '');
       console.error('Anthropic API error', res.status, detail.slice(0, 500));
-      return json({ error: 'Upstream error' }, 502);
+
+      let upstreamType = '';
+      try { upstreamType = JSON.parse(detail)?.error?.type || ''; } catch { /* not JSON */ }
+
+      if (res.status === 401 || res.status === 403) {
+        return fail('bad_api_key',
+          'The Anthropic API key was rejected. Check ANTHROPIC_API_KEY in Netlify.', 502);
+      }
+      if (res.status === 404 || upstreamType === 'not_found_error') {
+        return fail('model_unavailable',
+          `This account cannot reach the model "${MODEL}". Set CONCIERGE_MODEL to one it can use.`, 502);
+      }
+      if (res.status === 429) {
+        return fail('upstream_rate_limited', 'The Anthropic API is rate limiting this key.', 502);
+      }
+      return fail('upstream_error', `Anthropic API returned ${res.status}.`, 502);
     }
 
     const data = await res.json();
@@ -273,10 +310,10 @@ export default async (req) => {
       .join('\n')
       .trim();
 
-    if (!answer) return json({ error: 'Empty response' }, 502);
+    if (!answer) return fail('empty_response', 'The model returned no text.', 502);
     return json({ answer });
   } catch (err) {
     console.error('Concierge failure', err);
-    return json({ error: 'Concierge unavailable' }, 502);
+    return fail('network_error', `Could not reach the Anthropic API: ${err?.message || 'unknown error'}`, 502);
   }
 };

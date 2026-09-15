@@ -2,8 +2,7 @@
 # Static site, no build step. Serverless concierge under /.netlify/functions/.
 
 [build]
-  publish  = "public"
-  command  = ""
+  publish = "public"
   # data/ and docs/ stay in the repo but are deliberately outside `publish`
   # so internal working notes are never served.
 

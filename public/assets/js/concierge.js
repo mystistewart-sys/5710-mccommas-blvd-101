@@ -24,10 +24,26 @@
     'the taxes, the layout, parking or the schools. For anything I cannot confirm, ' +
     "I'll point you to Mysti.";
 
-  var CONTACT_FALLBACK =
-    'I am not able to reach the concierge service right now. Mysti Stewart can answer ' +
-    'directly — call or text <a href="tel:+12142133537">214-213-3537</a> or email ' +
+  var REACH_MYSTI =
+    'Mysti Stewart can answer directly — call or text ' +
+    '<a href="tel:+12142133537">214-213-3537</a> or email ' +
     '<a href="mailto:mysti.stewart@compass.com">mysti.stewart@compass.com</a>.';
+
+  /* Visitors always get the same calm hand-off to Mysti. The distinction is for
+     whoever is debugging: the real cause goes to the console and, for setup
+     problems that only an operator can fix, onto the page itself. */
+  var OPERATOR_NOTES = {
+    not_configured:  'Setup needed: ANTHROPIC_API_KEY is not set on this Netlify deploy.',
+    bad_api_key:     'Setup needed: Netlify rejected the Anthropic API key.',
+    model_unavailable: 'Setup needed: this Anthropic account cannot reach the configured model.',
+    not_deployed:    'Setup needed: the concierge function is not deployed at /.netlify/functions/concierge.'
+  };
+
+  function failureHtml(code, detail) {
+    var note = OPERATOR_NOTES[code];
+    return 'I am not able to reach the concierge service right now. ' + REACH_MYSTI +
+           (note ? '<br><br><small><strong>' + esc(note) + '</strong> ' + esc(detail || '') + '</small>' : '');
+  }
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -136,8 +152,22 @@
     })
       .then(function (r) {
         clearTimeout(to);
-        return r.json().then(function (j) {
-          if (!r.ok) throw new Error(j && j.error ? j.error : 'HTTP ' + r.status);
+        return r.text().then(function (raw) {
+          var j = null;
+          try { j = JSON.parse(raw); } catch (e) { /* not JSON */ }
+
+          /* A non-JSON body means the request never reached the function —
+             usually a 404 HTML page because functions were not deployed. */
+          if (!j) {
+            var e404 = new Error('The concierge endpoint did not return JSON (HTTP ' + r.status + ').');
+            e404.code = r.status === 404 ? 'not_deployed' : 'bad_response';
+            throw e404;
+          }
+          if (!r.ok) {
+            var err = new Error((j.error || 'HTTP ' + r.status));
+            err.code = j.code || 'http_' + r.status;
+            throw err;
+          }
           return j;
         });
       })
@@ -150,11 +180,17 @@
         history.push({ role: 'assistant', content: answer });
         track('ai_answer');
       })
-      .catch(function () {
+      .catch(function (err) {
         clearTimeout(to);
         typing.remove();
-        addAI(CONTACT_FALLBACK, 'msg--err');
-        track('ai_error');
+        var code = (err && err.code) || (err && err.name === 'AbortError' ? 'timeout' : 'network_error');
+        var detail = (err && err.message) || '';
+        // Surfaced for whoever is debugging the deploy; visitors see the hand-off above.
+        if (window.console && console.error) {
+          console.error('[concierge] request failed —', code + ':', detail);
+        }
+        addAI(failureHtml(code, detail), 'msg--err');
+        track('ai_error', { code: code });
       })
       .then(function () {
         busy = false;

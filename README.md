@@ -22,7 +22,7 @@ public/                     ← the deploy root (Netlify `publish`)
   assets/img/gallery/       29 photos, 1800w full + 800w thumb, WebP + JPEG
   assets/img/og-card.jpg    1200 × 630 social card
 netlify/functions/
-  concierge.js              Anthropic Messages API proxy + knowledge base
+  concierge.mjs             Anthropic Messages API proxy + knowledge base
 data/property.json          verified facts, source of truth — NOT deployed
 netlify.toml                publish/functions/headers config
 ```
@@ -46,8 +46,10 @@ npx netlify-cli dev
 1. Connect this repo to Netlify. `netlify.toml` supplies everything:
    publish `public`, no build command, functions in `netlify/functions`.
 2. Set the environment variable **`ANTHROPIC_API_KEY`** (Site configuration →
-   Environment variables). Without it the concierge returns HTTP 503 and the
-   widget shows its "call Mysti" fallback — the page itself is unaffected.
+   Environment variables), then redeploy — env vars do not reach a site that is
+   already built. Without it the concierge returns HTTP 503 and the widget shows
+   its "call Mysti" fallback; the rest of the page is unaffected.
+   Optional: `CONCIERGE_MODEL` to change the model without editing code.
 3. The contact form uses **Netlify Forms** (`name="showing-request"`). It is
    detected automatically at deploy. Add notification recipients under
    Forms → Settings → Form notifications.
@@ -92,13 +94,37 @@ conversion labels to `adsLabels` keyed by event name.
 ## AI concierge
 
 `POST /.netlify/functions/concierge` → `{ answer }`
+`GET  /.netlify/functions/concierge` → health check
+
+### If the concierge isn't answering
+
+Open `https://<your-site>/.netlify/functions/concierge` in a browser. The GET
+health check tells you the state of the deploy without exposing the key:
+
+| Response | Meaning | Fix |
+|---|---|---|
+| `{"ok":true,...}` | Function deployed, key set | Ask a question and read the `code` in the console |
+| `{"ok":false,"apiKeyConfigured":false}` | Function deployed, **no key** | Set `ANTHROPIC_API_KEY` in Netlify → Site configuration → Environment variables, then **redeploy** |
+| A 404 HTML page | Functions were not deployed | Check `netlify.toml` is at the repo root and the deploy log shows the function bundling |
+
+Ask a question with the browser console open (F12). Every failure logs
+`[concierge] request failed — <code>: <detail>`, and setup problems also print
+on the page itself. Codes: `not_configured`, `bad_api_key`, `model_unavailable`,
+`not_deployed`, `upstream_rate_limited`, `network_error`, `timeout`.
+
+Setting an env var in Netlify does **not** apply to the running site until you
+redeploy (Deploys → Trigger deploy → Clear cache and deploy site).
+
+### Details
 
 The API key stays server-side. The knowledge base is a curated extract of the
 MLS and DCAD records, organised by document class inside the function — not a raw
 text dump. It deliberately excludes owner identity, keybox details, private agent
 remarks and the agent-only showing line.
 
-Model: `claude-sonnet-5`, temperature 0.2, max 700 tokens, last 8 turns of history.
+Model: `claude-opus-5` (override per-deploy with the `CONCIERGE_MODEL` env var —
+`claude-sonnet-5` is a cheaper option), temperature 0.2, max 700 tokens, last 8
+turns of history.
 Guardrails: answer only from the record, qualify material facts, flag MLS/DCAD
 conflicts, never guarantee taxes or school attendance, never claim an unlisted
 amenity, fair-housing and privacy rules.
@@ -114,7 +140,7 @@ amenity, fair-housing and privacy rules.
 | Gallery photos, order, captions, categories | `PHOTOS` and `CATS` in `public/assets/js/main.js` |
 | Neighborhood destinations | `PLACES` in `public/assets/js/main.js` |
 | Property detail tables, costs, schools, disclaimers | `public/index.html` |
-| Concierge knowledge | `KB` in `netlify/functions/concierge.js` |
+| Concierge knowledge | `KB` in `netlify/functions/concierge.mjs` |
 
 `data/property.json` is the reference record. It is not read at runtime, so any
 fact change must be applied in the page and the function KB as well.
