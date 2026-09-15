@@ -120,11 +120,13 @@
       "Cable TV Available",
       "Decorative Lighting",
       "Flat Screen Wiring",
-      "High Speed Internet Available"
+      "High Speed Internet Available",
+      "Other"
     ],
     "exterior": [
       "Balcony",
-      "Rain Gutters"
+      "Rain Gutters",
+      "Other"
     ],
     "security": [
       "Fire Sprinkler System",
@@ -154,6 +156,7 @@
       "Common",
       "Covered",
       "Garage Door Opener",
+      "Other",
       "Underground"
     ],
     "summary": "Two assigned, covered parking spaces in the building's underground garage."
@@ -164,7 +167,7 @@
     "lotSizeRange": ".5 to < 1 Acre",
     "commonElementInterestPct": 2.72,
     "subdividable": false,
-    "note": "The 0.957-acre / 41,686 sq ft figure is the land of the entire Greenwood Flats condominium regime, held in common \u2014 it is not a private lot conveyed with Unit 101. Unit 101 carries a 2.72% undivided common-element interest."
+    "note": "The 0.957-acre / 41,686 sq ft figure is the land of the entire Greenwood Flats condominium regime, held in common — it is not a private lot conveyed with Unit 101. Unit 101 carries a 2.72% undivided common-element interest."
   },
   "hoa": {
     "required": "Mandatory",
@@ -224,7 +227,7 @@
       }
     ],
     "specialAssessments": "None disclosed. Public Improvement District (PID): No. Municipal Utility District (MUD): No.",
-    "melloRoos": "Not applicable \u2014 Mello-Roos is a California mechanism and does not exist in Texas.",
+    "melloRoos": "Not applicable — Mello-Roos is a California mechanism and does not exist in Texas.",
     "notes": [
       "The $10,910.88 figure is DCAD's 2026 estimate on a $490,000 taxable value with no exemptions applied. It reconciles exactly: $490,000 x 2.22671% = $10,910.88.",
       "Texas has no California-style Proposition 13 assessment cap. Values are reappraised toward market, so a buyer's assessment may differ from the current figure.",
@@ -248,7 +251,7 @@
     "elementary": "Mockingbird Elementary School",
     "middle": "Long Middle School",
     "high": "Woodrow Wilson High School",
-    "ratings": "Not provided \u2014 no ratings are published on this site.",
+    "ratings": "Not provided — no ratings are published on this site.",
     "disclaimer": "School assignments, boundaries, ratings, enrollment eligibility, and transfer policies may change. Buyers should independently verify school information directly with Dallas ISD."
   },
   "neighborhood": {
@@ -311,7 +314,7 @@
     },
     {
       "title": "Polished concrete floors throughout",
-      "body": "Durable, continuous concrete flooring runs through the living areas \u2014 no carpet seams, no refinishing."
+      "body": "Durable, continuous concrete flooring runs through the living areas — no carpet seams, no refinishing."
     },
     {
       "title": "Two covered underground parking spaces",
@@ -323,7 +326,7 @@
     }
   ],
   "marketing": {
-    "headline": "Live the Lower Greenville lifestyle \u2014 without the upkeep",
+    "headline": "Live the Lower Greenville lifestyle — without the upkeep",
     "pullQuote": "Lock it, leave it, and let the neighborhood do the rest.",
     "mlsPublicRemarksSource": "NTREIS MLS# 21312626 public remarks, written by the listing agent."
   },

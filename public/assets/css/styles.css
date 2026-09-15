@@ -302,7 +302,12 @@ body.is-locked .nav,body.is-locked .ai__open{opacity:0;pointer-events:none;visib
   color:var(--teal);padding-bottom:.7rem;border-bottom:1px solid var(--sage);margin-bottom:.4rem;
 }
 .spec dl{margin:0}
-.spec div{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.72rem 0;border-bottom:1px solid var(--line)}
+.spec dl > div{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:.72rem 0;border-bottom:1px solid var(--line)}
+/* Long comma lists read badly squeezed into a right-aligned half-column;
+   these rows stack the label over a full-width value instead. */
+.spec dl > div.stack{display:block}
+.spec .stack dt{max-width:none;margin-bottom:.25rem}
+.spec .stack dd{text-align:left;font-weight:500;line-height:1.5;color:var(--ink)}
 .spec dt{font-family:var(--font-display);font-size:.84rem;color:var(--ink-soft);flex:0 0 auto;max-width:52%}
 .spec dd{margin:0;font-family:var(--font-display);font-size:.88rem;font-weight:600;text-align:right;color:var(--ink)}
 .spec dd .note{display:block;font-weight:400;font-size:.76rem;color:var(--ink-faint);margin-top:.15rem;line-height:1.45}

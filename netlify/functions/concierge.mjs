@@ -42,24 +42,25 @@ Living, dining and kitchen are open to one another.
 
 ## 4. CONSTRUCTION AND SYSTEMS
 Type: Condominium, attached. Style: Contemporary/Modern.
-Construction: Stucco and wood. Exterior wall material: stucco. Frame construction.
+Construction Materials: Stucco, Wood. Exterior wall material: stucco. Frame construction.
 Foundation: Slab. Roof: Composition. (Roof type is recorded elsewhere as flat with comp roll
 material; if asked, say composition and that the detail is worth confirming.)
-Flooring: Concrete. Heating: Central, electric. Cooling: Central air, electric.
-Water heater: electric. Utilities: City water and city sewer.
-Safety: Fire sprinkler system, firewall(s), smoke detector(s), wireless.
+Flooring: Concrete. Heating: Central, Electric. Cooling: Central Air, Electric.
+Water heater: electric. Utilities: City Sewer, City Water.
+Security Features: Fire Sprinkler System, Firewall(s), Smoke Detector(s), Wireless.
 Fireplaces: 0. Pool: No. Condition rating: Very Good. Depreciation 3%. 100% complete.
-Appliances listed: dishwasher, disposal, electric oven, electric water heater,
-gas cooktop, refrigerator, vented exhaust fan.
-Interior features: cable TV available, decorative lighting, flat screen wiring,
-high speed internet available.
-Exterior features: balcony, rain gutters. Fence: wood and wrought iron.
-Lot description: few trees, landscaped, sprinkler system.
+Appliances: Dishwasher, Disposal, Electric Oven, Electric Water Heater, Gas Cooktop,
+Refrigerator, Vented Exhaust Fan.
+Interior Features: Cable TV Available, Decorative Lighting, Flat Screen Wiring,
+High Speed Internet Available, Other.
+Exterior Features: Balcony, Rain Gutters, Other.
+Fencing: Wood, Wrought Iron.
+Lot Features: Few Trees, Landscaped, Sprinkler System.
 Smart Home App/Powered: No.
 
 ## 5. PARKING
 2 garage spaces, 2 covered spaces, 0 carport.
-Described as: assigned, common, covered, garage door opener, underground.
+Parking Features: Assigned, Common, Covered, Garage Door Opener, Other, Underground.
 The garage is a shared underground garage; the unit's spaces are assigned.
 Attached garage: No (the garage serves the building).
 
@@ -75,7 +76,7 @@ Most recent deed transfer on record: 09/07/2023.
 ## 7. HOA
 Mandatory. Managed by Guardian Association Management, 972-458-2200.
 Dues: $457 per month.
-Dues include: Full Use of Facilities, Insurance, Maintenance Structure,
+Association Fee Includes: Full Use of Facilities, Insurance, Maintenance Structure,
 Management Fees.
 IMPORTANT LIMIT: the specific facilities and amenities are not itemised in the
 information available. Do NOT state or imply that there is a pool, gym, clubhouse or
