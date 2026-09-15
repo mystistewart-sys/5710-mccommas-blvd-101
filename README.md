@@ -56,6 +56,10 @@ npx netlify-cli dev
 
 ### Required before launch
 
+> The production-domain reminder used to live as an HTML comment in `index.html`.
+> It was removed so nothing internal ships in the page source — it lives here now.
+
+
 Search and replace the placeholder domain `5710-mccommas-blvd-101.netlify.app`
 with the real production domain in:
 

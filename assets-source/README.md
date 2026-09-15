@@ -13,3 +13,7 @@ assigned to each.
 
 Not supplied by the client, and therefore absent: floor plan, video, virtual
 tour, upgrade schedule, HOA documents, comparables, survey, seller's disclosure.
+
+`mysti-stewart-original.jpg` is the unmodified agent headshot as supplied
+(2000 x 2000 JPEG). The web copies in `public/assets/img/agent/` are a 4:5 crop
+derived from it at 560w and 900w, WebP and JPEG.

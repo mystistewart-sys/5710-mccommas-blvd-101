@@ -19,10 +19,9 @@
   var greeted = false;
 
   var GREETING =
-    'Hi — I can answer questions about 5710 McCommas Blvd #101 using the listing ' +
-    'and the Dallas appraisal district record for this unit. Ask me about the HOA, ' +
-    'the taxes, the layout, parking or the schools. For anything I cannot confirm, ' +
-    "I'll point you to Mysti.";
+    'Hello — I can answer questions about 5710 McCommas Blvd #101. Ask me about the ' +
+    'HOA, the taxes, the layout, parking or the schools. For anything I cannot ' +
+    "confirm, I'll point you to Mysti.";
 
   var REACH_MYSTI =
     'Mysti Stewart can answer directly — call or text ' +
