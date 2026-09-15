@@ -266,21 +266,35 @@ export default async (req) => {
   const messages = [...history, { role: 'user', content: question }];
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    /* Request shape notes for the Claude 5 family:
+       - `temperature` / `top_p` / `top_k` were REMOVED and return a 400. Sending
+         temperature is what broke every request on the first deploy.
+       - Thinking is adaptive and ON by default, and thinking tokens count toward
+         max_tokens, so 700 is not enough headroom for a reliable answer.
+       - `output_config.effort` is GA (no beta header); "low" suits short factual
+         answers drawn from a small knowledge base. */
+    const callApi = (body) => fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         'x-api-key': key,
         'anthropic-version': '2023-06-01'
       },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 700,
-        temperature: 0.2,
-        system: SYSTEM,
-        messages
-      })
+      body: JSON.stringify(body)
     });
+
+    const baseBody = { model: MODEL, max_tokens: 4000, system: SYSTEM, messages };
+    let res = await callApi({ ...baseBody, output_config: { effort: 'low' } });
+
+    /* Safety net: if this model or account rejects an optional parameter, retry
+       once with the minimal valid body rather than failing the visitor. A
+       degraded answer beats no answer, and the cause is logged either way. */
+    if (res.status === 400) {
+      const first = await res.clone().text().catch(() => '');
+      console.error('Anthropic 400 with output_config; retrying minimal body.', first.slice(0, 300));
+      res = await callApi(baseBody);
+      if (res.ok) console.warn('Minimal-body retry succeeded — output_config is not accepted here.');
+    }
 
     if (!res.ok) {
       const detail = await res.text().catch(() => '');
@@ -300,17 +314,38 @@ export default async (req) => {
       if (res.status === 429) {
         return fail('upstream_rate_limited', 'The Anthropic API is rate limiting this key.', 502);
       }
+      if (res.status === 400) {
+        let msg = '';
+        try { msg = JSON.parse(detail)?.error?.message || ''; } catch { /* not JSON */ }
+        return fail('bad_request_upstream',
+          `The Anthropic API rejected the request: ${msg || 'invalid request'}`, 502);
+      }
       return fail('upstream_error', `Anthropic API returned ${res.status}.`, 502);
     }
 
     const data = await res.json();
+
+    /* Claude 5 models can decline a request (HTTP 200 + stop_reason "refusal"),
+       so check stop_reason before reading content. */
+    if (data?.stop_reason === 'refusal') {
+      console.warn('Model refused', JSON.stringify(data?.stop_details || {}));
+      return fail('refusal', 'The assistant declined to answer that one.', 502);
+    }
+
+    /* Thinking blocks are filtered out; only text reaches the visitor. */
     const answer = (data?.content ?? [])
       .filter((b) => b.type === 'text')
       .map((b) => b.text)
       .join('\n')
       .trim();
 
-    if (!answer) return fail('empty_response', 'The model returned no text.', 502);
+    if (!answer) {
+      const why = data?.stop_reason === 'max_tokens'
+        ? 'The reply hit the token limit before any text was produced.'
+        : 'The model returned no text.';
+      console.error('Empty answer; stop_reason =', data?.stop_reason);
+      return fail('empty_response', why, 502);
+    }
     return json({ answer });
   } catch (err) {
     console.error('Concierge failure', err);

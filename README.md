@@ -110,7 +110,8 @@ health check tells you the state of the deploy without exposing the key:
 Ask a question with the browser console open (F12). Every failure logs
 `[concierge] request failed — <code>: <detail>`, and setup problems also print
 on the page itself. Codes: `not_configured`, `bad_api_key`, `model_unavailable`,
-`not_deployed`, `upstream_rate_limited`, `network_error`, `timeout`.
+`not_deployed`, `bad_request_upstream`, `upstream_rate_limited`, `refusal`,
+`empty_response`, `network_error`, `timeout`.
 
 Setting an env var in Netlify does **not** apply to the running site until you
 redeploy (Deploys → Trigger deploy → Clear cache and deploy site).
@@ -122,9 +123,16 @@ MLS and DCAD records, organised by document class inside the function — not a 
 text dump. It deliberately excludes owner identity, keybox details, private agent
 remarks and the agent-only showing line.
 
-Model: `claude-opus-5` (override per-deploy with the `CONCIERGE_MODEL` env var —
-`claude-sonnet-5` is a cheaper option), temperature 0.2, max 700 tokens, last 8
-turns of history.
+Model: `claude-opus-5` (override per-deploy with `CONCIERGE_MODEL` — `claude-sonnet-5`
+is a cheaper option), `max_tokens` 4000, `output_config.effort: low`, last 8 turns
+of history.
+
+**Do not add `temperature`, `top_p` or `top_k`.** Sampling parameters were removed
+on the Claude 5 family and return a 400 — sending `temperature` is what broke every
+request on the first deploy. Thinking is adaptive and on by default, and thinking
+tokens count toward `max_tokens`, which is why the cap is 4000 rather than a few
+hundred. If the account rejects `output_config`, the function retries once with a
+minimal body so visitors still get an answer.
 Guardrails: answer only from the record, qualify material facts, flag MLS/DCAD
 conflicts, never guarantee taxes or school attendance, never claim an unlisted
 amenity, fair-housing and privacy rules.
