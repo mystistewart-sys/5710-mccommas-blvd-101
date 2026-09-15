@@ -146,6 +146,19 @@ amenity, fair-housing and privacy rules.
 
 ---
 
+## Cache busting
+
+`tools/stamp-assets.mjs` appends an 8-character content hash to every
+`/assets/css/*` and `/assets/js/*` reference in the HTML. Netlify runs it on
+every deploy (`command` in `netlify.toml`), so a changed stylesheet gets a new
+URL and a returning visitor never sees fresh HTML paired with a stale
+stylesheet. Unchanged files keep their hash and stay cached.
+
+It has no dependencies and is safe to run by hand: `node tools/stamp-assets.mjs`.
+
+**Images are still cached for a year and are not stamped.** If you replace a
+photo, give the new file a different name, or the old one will keep serving.
+
 ## Map
 
 The map is embedded directly and carries `loading="lazy"`, so it appears without a

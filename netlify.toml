@@ -1,8 +1,11 @@
 # Netlify configuration — 5710 McCommas Blvd #101
-# Static site, no build step. Serverless concierge under /.netlify/functions/.
+# Static site. One build step stamps asset URLs. Concierge under /.netlify/functions/.
 
 [build]
   publish = "public"
+  # Fingerprints the CSS/JS references in the HTML so a deploy always invalidates
+  # the browser cache for changed assets, and never for unchanged ones.
+  command = "node tools/stamp-assets.mjs"
   # data/ and docs/ stay in the repo but are deliberately outside `publish`
   # so internal working notes are never served.
 
