@@ -1,0 +1,38 @@
+{
+  "_comment": "Everything that stays the same on EVERY listing. Edit once.",
+  "team": {
+    "name": "Mysti Stewart Group",
+    "agent": "Mysti Stewart",
+    "agentLegalName": "Mysti Newberry Stewart",
+    "license": "0525273",
+    "phone": "214-213-3537",
+    "phoneE164": "+12142133537",
+    "email": "mysti.stewart@compass.com",
+    "website": "https://www.mystistewartgroup.com",
+    "websiteLabel": "mystistewartgroup.com",
+    "photo": "/assets/img/agent/mysti-stewart",
+    "photoAlt": "Mysti Stewart of the Mysti Stewart Group, Compass RE Texas, LLC."
+  },
+  "brokerage": {
+    "name": "Compass RE Texas, LLC",
+    "license": "9006927",
+    "phone": "214-814-8100",
+    "street": "6220 Gaston Avenue, Suite 200",
+    "cityLine": "Dallas, Texas 75214"
+  },
+  "mls": {
+    "name": "North Texas Real Estate Information Systems (NTREIS)",
+    "shortName": "NTREIS"
+  },
+  "analytics": {
+    "_comment": "Leave blank and nothing loads. Never paste another property's IDs.",
+    "ga4": "G-R7X5SELD1R",
+    "googleAds": "",
+    "metaPixel": ""
+  },
+  "legal": {
+    "reliability": "<strong>Information is deemed reliable but not guaranteed.</strong> All property details on this page — including square footage, room dimensions, lot and common-area size, year built, schools, HOA dues and what they cover, taxes, special assessments, appliances, materials, permits, amenities, parking and any other material fact — should be independently verified by the buyer during the due-diligence period. Nothing on this page is a substitute for a survey, inspection, appraisal, title review or the HOA resale package.",
+    "estimates": "Tax figures are estimates and are not a quote, a bill, or a guarantee of any future amount. No representation is made about future appreciation, rental income, rentability, school attendance, or the availability or private ownership of any community amenity. Furnishings and décor shown in photography are not included in the sale.",
+    "equalHousing": "Equal Housing Opportunity. We are committed to and comply with the Fair Housing Act and the Equal Opportunity Act."
+  }
+}

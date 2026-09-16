@@ -76,15 +76,18 @@ grep -rn '5710-mccommas-blvd-101.netlify.app' public/
 
 ## Analytics
 
-No measurement IDs were supplied for this property, so **nothing is loaded and no
-events are sent**. The event layer is built and wired; it activates the moment IDs
-are added at the top of `public/assets/js/main.js`:
+GA4 is live on this property with measurement ID **`G-R7X5SELD1R`**. Google Ads
+and the Meta Pixel are not configured and load nothing. Config sits at the top of
+`public/assets/js/main.js`:
 
 ```js
-var ANALYTICS = { ga4: '', googleAds: '', adsLabels: {}, metaPixel: '' };
+var ANALYTICS = { ga4: 'G-R7X5SELD1R', googleAds: '', adsLabels: {}, metaPixel: '' };
 ```
 
-Never paste in another property's IDs. Events already instrumented:
+Add a Google Ads ID plus `adsLabels` keyed by event name to fire conversions, e.g.
+`adsLabels: { cta_showing: 'AW-XXXXXXXXX/xxxxxxxxxxxxxxxx' }`.
+
+Never paste in another property's IDs — a test asserts exactly one measurement ID is present. Events already instrumented:
 `cta_showing`, `cta_ask`, `cta_gallery`, `contact_call`, `contact_email`,
 `gallery_open`, `gallery_filter`,
 `tax_estimator_used`, `map_viewed`, `map_open_external`, `ai_open`, `ai_question`, `ai_answer`,

@@ -21,7 +21,7 @@
      Conversions fire on real visitor actions only — never on page load.
   --------------------------------------------------------------------- */
   var ANALYTICS = {
-    ga4: '',
+    ga4: 'G-R7X5SELD1R',
     googleAds: '',
     adsLabels: {},
     metaPixel: ''
