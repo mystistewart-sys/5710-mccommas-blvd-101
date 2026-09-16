@@ -21,7 +21,10 @@
      Conversions fire on real visitor actions only — never on page load.
   --------------------------------------------------------------------- */
   var ANALYTICS = {
-    ga4: 'G-R7X5SELD1R',
+    /* GA4 is installed with Google's standard gtag.js snippet in the <head> of
+       index.html. It is deliberately NOT loaded from here as well: two
+       gtag('config', ...) calls for the same property double-count every
+       pageview. To change the measurement ID, edit the snippet in the HTML. */
     googleAds: '',
     adsLabels: {},
     metaPixel: ''
@@ -30,15 +33,18 @@
   window.dataLayer = window.dataLayer || [];
 
   function loadAnalytics() {
-    var ids = [ANALYTICS.ga4, ANALYTICS.googleAds].filter(Boolean);
-    if (ids.length) {
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ids[0]);
-      document.head.appendChild(s);
-      window.gtag = function () { window.dataLayer.push(arguments); };
-      window.gtag('js', new Date());
-      ids.forEach(function (id) { window.gtag('config', id); });
+    /* Google Ads only. gtag.js itself is already on the page from the <head>
+       snippet, so reuse it rather than loading a second copy. */
+    if (ANALYTICS.googleAds) {
+      if (typeof window.gtag !== 'function') {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ANALYTICS.googleAds);
+        document.head.appendChild(s);
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+      }
+      window.gtag('config', ANALYTICS.googleAds);
     }
     if (ANALYTICS.metaPixel) {
       /* eslint-disable */

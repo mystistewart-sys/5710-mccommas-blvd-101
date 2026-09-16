@@ -76,12 +76,20 @@ grep -rn '5710-mccommas-blvd-101.netlify.app' public/
 
 ## Analytics
 
-GA4 is live on this property with measurement ID **`G-R7X5SELD1R`**. Google Ads
-and the Meta Pixel are not configured and load nothing. Config sits at the top of
-`public/assets/js/main.js`:
+GA4 is live with measurement ID **`G-R7X5SELD1R`**, installed as Google's
+standard `gtag.js` snippet in the `<head>` of `public/index.html` — the form
+Tag Assistant expects, and the earliest point it can fire. **To change the
+measurement ID, edit that snippet.**
+
+It is deliberately not also loaded from JavaScript. Two `gtag('config', ...)`
+calls for the same property double-count every pageview, so a test asserts
+exactly one `gtag/js` request and exactly one `config` call.
+
+Google Ads and the Meta Pixel are not configured and load nothing. Their config
+sits at the top of `public/assets/js/main.js`:
 
 ```js
-var ANALYTICS = { ga4: 'G-R7X5SELD1R', googleAds: '', adsLabels: {}, metaPixel: '' };
+var ANALYTICS = { googleAds: '', adsLabels: {}, metaPixel: '' };
 ```
 
 Add a Google Ads ID plus `adsLabels` keyed by event name to fire conversions, e.g.
