@@ -25,8 +25,8 @@ MLS #21312626. Status: Active. Back on market 09/04/2026.
 Listed 06/26/2026. Listing agent: Mysti Stewart, Compass RE Texas, LLC.
 
 ## 2. PRICE AND SIZE
-List price: $450,000 (also the original list price).
-Price per square foot: $277.09.
+List price: $435,000. Originally listed at $450,000, so the price has been reduced.
+Price per square foot: $267.86 ($435,000 / 1,624 sq ft).
 Interior: 1,624 sq ft. Living area is recorded consistently at 1,624 sq ft.
 Bedrooms: 2. Bathrooms: 2 full + 1 half (3 total). Each bedroom has its own ensuite full bath.
 Year built: 2016. Effective year built also 2016.
@@ -95,7 +95,7 @@ Combined rate 2.22671% per $100 of value, made up of:
   Dallas County 0.2155 -> $1,055.95
   Dallas College 0.106575 -> $522.22
   Parkland Hospital 0.2120 -> $1,038.80
-At the $450,000 list price the same rate produces roughly $10,020/year — an ESTIMATE only.
+At the $435,000 list price the same rate produces roughly $9,686/year — an ESTIMATE only.
 No special assessments disclosed. Mello-Roos does not exist in Texas (it is a California
 mechanism), and this property has no PID or MUD.
 Assessed values are reviewed annually and a buyer's assessment may differ from the

@@ -157,6 +157,22 @@ amenity, fair-housing and privacy rules.
 
 ---
 
+## Tests
+
+```bash
+npm install --no-save playwright
+node tests/check.mjs                 # serves public/ and checks it
+node tests/check.mjs https://…       # checks a deployed site
+```
+
+31 checks in a real browser. The price-related ones recompute each derived
+figure from `FACT` at the top of the file rather than comparing the page to a
+copy of itself, so a price change that misses the price-per-square-foot, the
+tax estimator, the structured data or a meta description fails the run.
+
+**When the price changes, edit `FACT.price` in `tests/check.mjs`** and the
+suite will tell you everywhere the page still disagrees.
+
 ## Cache busting
 
 `tools/stamp-assets.mjs` appends an 8-character content hash to every

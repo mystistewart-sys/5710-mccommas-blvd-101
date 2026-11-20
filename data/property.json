@@ -32,9 +32,9 @@
     "status": "Active",
     "mlsNumber": "21312626",
     "mlsSource": "NTREIS",
-    "listPrice": 450000,
+    "listPrice": 435000,
     "originalListPrice": 450000,
-    "pricePerSqFt": 277.09,
+    "pricePerSqFt": 267.86,
     "listDate": "2026-06-26",
     "expirationDate": "2026-12-31",
     "daysOnMarket": 59,
@@ -43,7 +43,9 @@
     "listingTerms": "Cash",
     "possession": "Closing/Funding",
     "listType": "Exclusive Right To Sell",
-    "alsoForLease": false
+    "alsoForLease": false,
+    "priceReducedFrom": 450000,
+    "priceNote": "Reduced from $450,000. Price per sq ft recalculated as $435,000 / 1,624 sq ft."
   },
   "structure": {
     "propertyType": "Residential",
